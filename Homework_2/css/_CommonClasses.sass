@@ -1,0 +1,51 @@
+@import "Vars"
+@import "mixins"
+
+.button
+  +Button($Color_White, $Color_Pink, transparent, 38px, none, 400, 19px, 15px, flex)
+
+.button:hover
+  border: 1px solid $Color_Pink
+  color: $Color_Pink
+  background-color: white
+
+
+.button-50
+  +Button($Color_White, $Color_Pink, transparent, 50px, uppercase, 700, 19px, 16px, flex)
+
+.button-50:hover
+  border: 1px solid $Color_Pink
+  color: $Color_Pink
+  background-color: white
+
+
+.Button-Pink-White-Pink-50
+  +Button($Color_Pink, $Color_White, $Color_Pink, 50px, uppercase, 700, 39px, 15px, flex)
+
+.Button-Pink-White-Pink-50:hover
+  border: 1px solid $Color_White
+  color: $Color_White
+  background-color: $Color_Pink
+
+
+.Button-Black-White-Gray-50
+  +Button($Color_Black, $Color_White, $Color_Gray, 50px, uppercase, 700, 39px, 15px, flex)
+
+.Button-Black-White-Gray-50:hover
+  border: 1px solid transparent
+  color: $Color_White
+  background-color: $Color_Pink
+
+
+.Button-Black-White-Gray-35
+  +Button($Color_Black, $Color_White, $Color_Gray, 35px, uppercase, 700, 15px, 11px, inline-block)
+
+.Button-Black-White-Gray-35:hover
+  border: 1px solid transparent
+  color: $Color_White
+  background-color: $Color_Pink
+
+
+.SplitHorizontalLine
+  height: 1px
+  background-color: #ededed

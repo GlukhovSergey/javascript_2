@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 4</title>
+</head>
+<body>
+
+<label for="name">Имя</label>
+<input id="name" placeholder="Имя" autofocus pattern="\S+[А-яа-я]">
+
+<input id="button" type="submit" value="Отправить информацию">
+<div id = "response"></div>
+
+<script>
+    function buttonClickHandler() {
+        let elInput = document.getElementById('name');
+
+        let querryName = '';
+        if (elInput.value === '') {
+            querryName = "error.json";
+        } else {
+            querryName = "success.json";
+        }
+
+        fetch(querryName)
+            .then(result => {
+                return result.json();
+            })
+            .then(data => {
+                document.getElementById('response').innerText = JSON.stringify(data);
+            })
+    }
+
+    window.onload = () => {
+        document.getElementById('button').addEventListener('click', () => buttonClickHandler());
+    }
+
+</script>
+
+</body>
+</html>

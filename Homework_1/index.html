@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id = "btnRemoveMenu">Удалить меню</button>
+<div id="menu"></div>
+<script src="MenuItem.js"></script>
+<script src="Menu.js"></script>
+<script src="SubMenu.js"></script>
+<script>
+    window.onload = () => {
+        document.getElementById("btnRemoveMenu").addEventListener('click', () => mymenu.remove());
+
+        // DOM ready
+        let block = document.getElementById('menu');
+
+        let mymenu = new Menu('my', 'my', [
+            new MenuItem('/', 'Home'),
+            new MenuItem('/about', 'about'),
+            new MenuItem('/blog', 'blog'),
+            new MenuItem('/services', 'services'),
+
+            new SubMenu('mySubMenu1', 'mySubMenu', 'SubMenu 1', [
+                new MenuItem('#', 'SubMenu item 1'),
+                new MenuItem('#', 'SubMenu item 2'),
+                new SubMenu('mySubMenu2', 'mySubMenu', 'SubMenu 2', [
+                    new MenuItem('#', 'SubMenu item 3'),
+                    new MenuItem('#', 'SubMenu item 4'),])]),
+        ]);
+
+        block.innerHTML = mymenu.render();
+    }
+</script>
+</body>
+</html>
