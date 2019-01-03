@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Контрол с вкладками</title>
+
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+
+<div class="tabs">
+
+    <ul class="tabs__caption">
+        <li class="active">1-я вкладка</li>
+        <li>2-я вкладка</li>
+        <li>3-я вкладка</li>
+        <li>4-я вкладка</li>
+        <li>5-я вкладка</li>
+    </ul>
+
+    <div class="tabs__content active">
+        <p>Содержимое первого блока</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid blanditiis, dolorem ea eaque et explicabo
+            fugit laboriosam laborum perferendis quae quaerat, quibusdam quidem voluptates? Amet aperiam assumenda
+            eos incidunt sint!
+        </p>
+    </div>
+    <div class="tabs__content">
+        <p>Содержимое второго блока</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid blanditiis, dolorem ea eaque et explicabo
+            fugit laboriosam laborum perferendis quae quaerat, quibusdam quidem voluptates? Amet aperiam assumenda
+            eos incidunt sint!
+        </p>
+    </div>
+    <div class="tabs__content">
+        <p>Содержимое третьего блока</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid blanditiis, dolorem ea eaque et explicabo
+            fugit laboriosam laborum perferendis quae quaerat, quibusdam quidem voluptates? Amet aperiam assumenda
+            eos incidunt sint!
+        </p>
+    </div>
+    <div class="tabs__content">
+        <p>Содержимое четвертого блока</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid blanditiis, dolorem ea eaque et explicabo
+            fugit laboriosam laborum perferendis quae quaerat, quibusdam quidem voluptates? Amet aperiam assumenda
+            eos incidunt sint!
+        </p>
+    </div>
+    <div class="tabs__content">
+        <p>Содержимое пятого блока</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid blanditiis, dolorem ea eaque et explicabo
+            fugit laboriosam laborum perferendis quae quaerat, quibusdam quidem voluptates? Amet aperiam assumenda
+            eos incidunt sint!
+        </p>
+    </div>
+
+</div>
+
+<script src="jquery.min.js"></script>
+<script>
+    $(document).ready(() => {
+        $('ul.tabs__caption').on('click', 'li:not(.active)', (event) => {
+            $(event.currentTarget)
+                .addClass('active').siblings().removeClass('active')
+                .closest('div.tabs').find('div.tabs__content').removeClass('active').eq($(this).index()).addClass('active');
+        });
+    });
+
+</script>
+
+</body>
+</html>

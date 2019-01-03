@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style>
+        .form-wrap {
+            margin: auto;
+            padding: 20px;
+            max-width: 800px
+        }
+
+        .my-alert {
+            width: 100%;
+            margin-top: .25rem;
+            font-size: 80%;
+            color: #dc3545;
+        }
+
+        .form-control_red {
+            border-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div class="form-wrap">
+    <form class="my-form" action="" id="myform" method="post">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <input type="text" name="name" class="form-control" placeholder="Имя">
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" name="phone" class="form-control" placeholder="+7(000)000-0000">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <input type="email" name="email" class="form-control" placeholder="e-mail">
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" name="city" list="city" class="form-control" placeholder="Город">
+                <datalist id="city"></datalist>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <input type="text" name="text" class="form-control" placeholder="">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <p>Собственная реализация поля автокомплит</p>
+                <input type="text" name="text" id="city2" class="form-control" placeholder="Город">
+                <ul id = city2DataList>
+
+                </ul>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="btnSend">Отправить</button>
+    </form>
+</div>
+
+<script src="jquery.min.js"></script>
+<script>
+
+    $(document).ready(() => {
+
+        formValidator = new FormValidator();
+        $('#myform').on('submit', (e) => {
+            formValidator.checkInputFields();
+            if (formValidator.isDataInFieldsNotCorrect()) {
+                e.preventDefault();
+            }
+        });
+
+        $.ajax({
+            url: 'cities.json',
+            type: 'GET',
+            dataType: 'json',
+            success: (data) => {
+                let $cityDataList = $('#city');
+                for (let city of data) {
+                    let $option = $(`<option>${city}</option>`);
+                    $cityDataList.append($option);
+                }
+            },
+            error: () => {
+                console.log('Ошибка загрузки списка городов');
+            }
+        });
+
+        //второй вариант реализации выбора города из списка
+        $('#city2').on('input', () => {
+            const inputText = $('#city2').val();
+            if (inputText.length < 3) {
+                return
+            }
+
+            $.ajax({
+                url: 'cities.json',
+                type: 'GET',
+                dataType: 'json',
+                success: (data) => {
+                    const inputText = $('#city2').val();
+                    let arrCities = [...data].filter(city => city.search(new RegExp('^' + inputText, 'ig')) !== -1);
+
+                    let $city2DataList = $('#city2DataList');
+                    $city2DataList.empty();
+
+                    for (let city of arrCities) {
+                        $city2DataList.append($(`<li><div>${city}</div></li>`))
+                    }
+
+                    $city2DataList.on('click', e => {
+                        $('#city2').val(e.target.innerHTML);
+                        $('#city2DataList').empty();
+                    })
+                },
+                error: () => {
+                    console.log('Ошибка загрузки списка городов');
+                }
+            });
+
+        })
+    });
+
+
+    class FormValidator {
+        constructor() {
+            this.alerts = {
+                'name': "Имя должно быть от 2 до 30 символов, только буквы",
+                'phone': "Телефон должен соответствовать шаблону +7(000)000-0000",
+                'email': "e-mail введен некорректно",
+            };
+        }
+
+        /**
+         * проверка всех полей ввода формы на корректность
+         */
+        checkInputFields() {
+            const inputElements = document.querySelectorAll('input');
+            for (const inputElem of inputElements) {
+                const nameInput = inputElem.getAttribute('name');
+                if (this.alerts[nameInput]) {
+                    this._checkField(nameInput, this.alerts[nameInput]);
+                }
+            }
+        }
+
+        /**
+         * Проверяем были ли найдены ошибки при проверке
+         * @return {boolean} возвращаем истины если ошибки при валидации полей были обнаружены
+         */
+        isDataInFieldsNotCorrect() {
+            return document.querySelector('.my-alert') !== null;
+        }
+
+        /**
+         * Проверка одного поля ввода
+         * @param nameInput - значение атрибута name проверяемого поля ввода
+         * @param alertMessage = текст сообщения, если будет найдена ошибка
+         */
+        _checkField(nameInput, alertMessage) {
+            const inputValue = document.querySelector(`[name = '${nameInput}']`).value;
+
+            let valueIsValid = true;
+            switch (nameInput) {
+                case 'name':
+                    valueIsValid = /^[a-zа-яА-ЯёЁ]{2,30}$/i.test(inputValue);
+                    break;
+                case 'phone':
+                    valueIsValid = /^\+7\((\d){3}\)(\d){3}-(\d){4}$/i.test(inputValue);
+                    break;
+                case 'email':
+                    valueIsValid = /^(([a-z]+)|([a-z]+\.[a-z]+)|([a-z]+-[a-z]+))@[a-z]+\.(ru|com)$/i.test(inputValue);
+                    break;
+            }
+
+            if (valueIsValid) {
+                this._removeAlert(nameInput);
+            } else {
+                this._showAlert(nameInput, alertMessage);
+            }
+        }
+
+        /**
+         * Показываем сообщение об ошибке под полем ввода
+         * @param fieldName - значение атрибута name проверяемого поля ввода
+         * @param alertMessage - текст сообщения об ошибке
+         */
+        _showAlert(fieldName, alertMessage) {
+            const alertElem = document.querySelector(`[name = '${fieldName}Alert']`);
+
+            if (alertElem === null) {
+                const alertElem = document.createElement('div');
+                alertElem.innerHTML = alertMessage;
+                alertElem.classList.add('my-alert');
+                alertElem.setAttribute('name', `${fieldName}Alert`);
+
+                const inputElem = document.querySelector(`[name = '${fieldName}']`);
+                inputElem.parentElement.appendChild(alertElem);
+                inputElem.classList.add('form-control_red');
+            }
+        }
+
+        /**
+         * Удаляем сообщение об ошибке
+         * @param fieldName - значение атрибута name проверяемого поля ввода
+         */
+        _removeAlert(fieldName) {
+            const alertElem = document.querySelector(`[name = '${fieldName}Alert']`);
+
+            if (alertElem !== null) {
+                const inputElem = document.querySelector(`[name = '${fieldName}']`);
+                inputElem.parentElement.removeChild(alertElem);
+                inputElem.classList.remove('form-control_red');
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
