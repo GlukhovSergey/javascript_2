@@ -1,0 +1,7 @@
+[
+  {"id": 1, "author":  "person1", "text":  "Мне был нужен кожаный ремень, выбирала из 2-х вариаций.", "isApproved": false },
+  {"id": 2, "author":  "person2", "text":  "Думала, что косметика для животных это причуды буржуев.", "isApproved": true },
+  {"id": 3, "author":  "person1", "text":  "Прочитал добрые отзывы - крайне удивле", "isApproved": false },
+  {"id": 4, "author":  "person3", "text":  "В тот же день подобрал замену, написал в поддержку - не ответили.", "isApproved": false },
+  {"id": 7, "author":  "person4", "text":  "Не плохой магазин, всегда его просматриваю.", "isApproved": false }
+]
